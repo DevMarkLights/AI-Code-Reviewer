@@ -78,5 +78,17 @@ async def getReview(body: dict = Body(...)):
     result = await code_Reviewer.ainvoke({'diff':diff})
     
     return {'result', result}
+
+@app.post('/testingPRFunctionality')
+async def getReview(body: dict = Body(...)):
     
+    if 'url' in body:
+        diff = await body.url
+    else:
+        return {'result', 'no url provided'}
+    
+    # get PR diff
+    result = await code_Reviewer.ainvoke({'diff':diff})
+    
+    return {'result', result}
     
