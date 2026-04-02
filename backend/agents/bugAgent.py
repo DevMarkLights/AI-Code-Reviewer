@@ -1,8 +1,7 @@
-from agentState import AgentState
 from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
-from agentState import AgentState
+from agents.agentState import AgentState
 import os
 from dotenv import load_dotenv
 from connectionManager import manager
@@ -12,8 +11,18 @@ import re
 load_dotenv()
 
 
-SYSTEM_PROMPT = """You are an expert in bug detection of code. 
-Given a pull request diff provide bug detection suggestions if they are any"""
+SYSTEM_PROMPT = """You are an expert bug detection engineer reviewing a GitHub Pull Request diff.
+
+Rules:
+- Analyze ONLY the code shown in the diff (lines starting with +)
+- Do NOT suggest changes to code outside the diff
+- Do NOT hallucinate issues that aren't present
+- If there are no bugs, respond with "No bugs found"
+
+For each bug found provide:
+- The specific line or code snippet from the diff
+- What the bug is
+- How to fix it"""
 
 async def bug_node(state: AgentState):
     
@@ -25,4 +34,4 @@ async def bug_node(state: AgentState):
     response = llm.invoke(messages)
     raw = response.content.strip()
 
-    return {"findings": [{"type": "bug", "content": ""}]}
+    return {"findings": [{"type": "bug", "content": raw}]}

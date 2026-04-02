@@ -1,6 +1,3 @@
-import asyncio
-import uuid
-
 from fastapi import FastAPI, File, UploadFile, Body, Form, WebSocket, WebSocketDisconnect
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +16,8 @@ from agents.performanceAgent import performance_node
 from agents.writerAgent import writer_node
 from pathlib import Path
 from agents.loadModel import llm_small, llm_large #load model one time
+from fetchDiff import fetch_diff
+from fetchDiff import postComment
 
 import logging
 
@@ -69,14 +68,30 @@ code_Reviewer = build_graph()
 @app.post('/getReview')
 async def getReview(body: dict = Body(...)):
     
+    url = 'https://github.com/DevMarkLights/AI-Code-Reviewer/pull/1'
+
     if 'url' in body:
-        diff = await body.url
+        diff = await fetch_diff(url)
     else:
         return {'result', 'no url provided'}
     
     # get PR diff
-    result = await code_Reviewer.ainvoke({'diff':diff})
+    result : AgentState = await code_Reviewer.ainvoke({'diff':diff, 'findings': [], 'finalReview': ''})
     
-    return {'result', result}
+    await postComment(url=url,comment=result['finalReview'])
     
+    return {'result': result['finalReview']}
     
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=8085,
+        log_level="debug",
+        reload=True,
+        ws_ping_interval=30, 
+        ws_ping_timeout=300
+    )
