@@ -13,10 +13,16 @@ load_dotenv()
 
 SYSTEM_PROMPT = """You are an expert security engineer reviewing a GitHub Pull Request diff.
 
+You will receive:
+- The changed lines (diff) showing what was added or removed
+- The full file so you have complete context
+
+
 Rules:
-- Analyze ONLY the code shown in the diff (lines starting with +)
-- Do NOT suggest changes to code outside the diff
-- Do NOT hallucinate issues that aren't present
+- Focus your review on the CHANGED lines
+- Use the full file ONLY for context (imports, existing functions, class structure)
+- Do not flag issues in unchanged code outside the diff
+- Do not hallucinate issues that aren't present
 - If there are no security issues, respond with "No security issues found"
 
 For each issue found provide:
