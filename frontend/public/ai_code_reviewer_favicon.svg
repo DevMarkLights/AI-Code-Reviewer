@@ -1,0 +1,12 @@
+<svg width="100%" viewBox="0 0 680 690" xmlns="http://www.w3.org/2000/svg"><defs><mask id="imagine-text-gaps-b18pmq" maskUnits="userSpaceOnUse"><rect x="0" y="0" width="680" height="690" fill="white"/><rect x="121.57128143310547" y="159.05224609375" width="436.85748291015625" height="308.11529541015625" fill="black" rx="2"/></mask></defs>
+  
+
+  <rect width="680" height="680" rx="120" style="fill:rgb(15, 17, 23);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <text x="340" y="400" text-anchor="middle" font-family="monospace" font-size="260" font-weight="700" fill="#e2e8f0" style="fill:rgb(226, 232, 240);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:monospace;font-size:260px;font-weight:700;text-anchor:middle;dominant-baseline:auto">&lt;/&gt;</text>
+
+  <circle cx="490" cy="210" r="90" style="fill:none;stroke:rgb(59, 130, 246);color:rgb(255, 255, 255);stroke-width:26px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="554" y1="276" x2="610" y2="336" fill="none" mask="url(#imagine-text-gaps-b18pmq)" style="fill:none;stroke:rgb(59, 130, 246);color:rgb(255, 255, 255);stroke-width:30px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <polyline points="448,205 468,230 520,178" mask="url(#imagine-text-gaps-b18pmq)" style="fill:none;stroke:rgb(34, 197, 94);color:rgb(255, 255, 255);stroke-width:28px;stroke-linecap:round;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</svg>
