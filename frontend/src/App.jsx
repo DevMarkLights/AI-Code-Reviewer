@@ -29,7 +29,7 @@ function App() {
     const clientId = crypto.randomUUID()
     setClientID(clientId)
     // var url = `ws://localhost:8085/ai-code-reviewer/ws?client_id=${clientId}`
-    var url = `wws://marks-pi.com/ai-code-reviewer/ws?client_id=${clientId}`
+    var url = `wss://marks-pi.com/ai-code-reviewer/ws?client_id=${clientId}`
     const ws = new WebSocket(url);
 
     ws.onmessage = (event) => {
