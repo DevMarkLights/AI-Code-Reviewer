@@ -5,7 +5,7 @@ from agents.agentState import AgentState
 import os
 from dotenv import load_dotenv
 from connectionManager import manager
-from .loadModel import GROQ_MODEL_GUARD_86 as llm
+from .loadModel import GROQ_MODEL_groq_compound as llm
 import re
 from connectionManager import manager
 
