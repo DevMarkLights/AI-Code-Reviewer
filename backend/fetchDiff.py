@@ -25,9 +25,11 @@ async def fetch_diff(pr_url: str) -> str:
         files = response.json()
         
         full_diff = ""
-        
-        # Step 2 — for each file fetch full contents
+        MAX_TOTAL_CHARS = 4000
+
         for file in files:
+            if len(full_diff) >= MAX_TOTAL_CHARS:
+                break
             filename = file['filename']
             contents_url = file['contents_url']
             
@@ -44,15 +46,16 @@ async def fetch_diff(pr_url: str) -> str:
             # contents are base64 encoded
             decoded = base64.b64decode(contents['content'].replace('\n', '')).decode('utf-8')
             
-            MAX_FILE_CHARS = 3000
+            MAX_FILE_CHARS = 1500
+            MAX_PATCH_CHARS = 1500
 
             full_diff += f"### File: {filename}\n"
-            full_diff += f"**Changes:**\n{file['patch']}\n\n"
+            full_diff += f"**Changes:**\n{file['patch'][:MAX_PATCH_CHARS]}\n\n"
 
             if len(decoded) <= MAX_FILE_CHARS:
                 full_diff += f"**Full file context:**\n```python\n{decoded}\n```\n\n"
             else:
-                full_diff += f"**Note:** File too large to include in full, showing diff only.\n\n"
+                full_diff += f"**Note:** File too large, showing diff only.\n\n"
                     
         return full_diff
         
