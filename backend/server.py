@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from connectionManager import manager
 from fastapi.responses import FileResponse
-
+import asyncio
 
 from langgraph.graph import StateGraph, END
 from agents.agentState import AgentState
@@ -25,10 +25,13 @@ logging.basicConfig(level=logging.ERROR)
 logging.getLogger("uvicorn.access").setLevel(logging.INFO)
 logging.getLogger("uvicorn.error").setLevel(logging.INFO)
 
+BASE_DIR = Path(__file__).parent
+
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173","https://marks-pi.com/"],
     allow_credentials=False,   # MUST be FALSE
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,9 +39,9 @@ app.add_middleware(
 
 def fan_out(state: AgentState):
     return [
-        Send("bug", {"diff": state["diff"]}),
-        Send("security", {"diff": state["diff"]}),
-        Send("performance", {"diff": state["diff"]}),
+        Send("bug", state),
+        Send("security", state),
+        Send("performance", state),
     ]
 
 def build_graph() -> StateGraph:
@@ -65,22 +68,61 @@ def build_graph() -> StateGraph:
 code_Reviewer = build_graph()
 
 
-@app.post('/getReview')
+@app.post('/ai-code-reviewer/getReview')
 async def getReview(body: dict = Body(...)):
     
-    url = 'https://github.com/DevMarkLights/AI-Code-Reviewer/pull/1'
-
-    if 'url' in body:
+    url = ""
+    client_id = ''
+    diff = ''
+    if 'url' in body and 'client_id' in body:
+        url = body['url']
         diff = await fetch_diff(url)
+        client_id = body['client_id'] 
+        await manager.broadcast(message={'message':'Found pull request'}, client_id=client_id)
     else:
         return {'result', 'no url provided'}
     
-    # get PR diff
-    result : AgentState = await code_Reviewer.ainvoke({'diff':diff, 'findings': [], 'finalReview': ''})
-    
-    await postComment(url=url,comment=result['finalReview'])
-    
+    try:
+        
+        result : AgentState = await code_Reviewer.ainvoke({'diff':diff, 'findings': [], 'finalReview': '', 'clientID': client_id})
+        
+        await manager.broadcast(message={'message':'posting comment'}, client_id=client_id)
+        
+        await postComment(url=url,comment=result['finalReview'])
+        
+    except Exception as e:
+        logging.error(msg=e)
+        return {'result': 'Agents failed. Please try again!'}
+        
     return {'result': result['finalReview']}
+
+@app.websocket("/ai-code-reviewer/ws")
+async def websocket_endpoint(websocket: WebSocket, client_id: str=None):
+    await manager.connect(websocket,client_id=client_id)
+    
+    async def keepalive():
+        while True:
+            await asyncio.sleep(10)  # ping every 10 seconds for keep alive
+            try:
+                await websocket.send_json({"ping": True})
+            except:
+                break
+
+    task = asyncio.create_task(keepalive())
+    try:
+        while True:
+            await websocket.receive() # keep alive
+    except WebSocketDisconnect:
+        print("Client disconnected")
+    except Exception as e:
+        print(f'Websocket error {e}')
+    
+    finally:
+        manager.disconnect(websocket=websocket,clientID=client_id)
+        
+
+app.mount("/ai-code-reviewer", StaticFiles(directory="dist", html=True), name="static")
+
     
 
 if __name__ == "__main__":

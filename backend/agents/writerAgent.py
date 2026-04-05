@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from connectionManager import manager
 from .loadModel import llm_small as llm
 import re
+from connectionManager import manager
 
 load_dotenv()
 
@@ -31,7 +32,7 @@ Rules:
 - Do not recommend libraries or frameworks not already in the code"""
 
 async def writer_node(state: AgentState):
-    
+    await manager.broadcast(message='writer agent has all findings', client_id=state['clientID'])
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Diff: {state['findings']}")
@@ -39,5 +40,7 @@ async def writer_node(state: AgentState):
     
     response = llm.invoke(messages)
     raw = response.content.strip()
+    
+    await manager.broadcast(message='writer agent is finished', client_id=state['clientID'])
     
     return {"finalReview": raw}

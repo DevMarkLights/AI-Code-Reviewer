@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from connectionManager import manager
 from .loadModel import llm_small as llm
 import re
+from connectionManager import manager
 
 load_dotenv()
 
@@ -31,13 +32,13 @@ For each issue found provide:
 - How to fix it"""
 
 async def performance_node(state: AgentState):
-    
+    await manager.broadcast(message={'message':'Performance agent is looking at diff'}, client_id=state['clientID'])
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Diff: {state['diff']}")
     ]
     
-    response = llm.invoke(messages)
+    response = await llm.ainvoke(messages)
     raw = response.content.strip()
     
     return {"findings": [{"type": "perfomance", "content": raw}]}
