@@ -44,12 +44,16 @@ async def fetch_diff(pr_url: str) -> str:
             # contents are base64 encoded
             decoded = base64.b64decode(contents['content'].replace('\n', '')).decode('utf-8')
             
-            full_diff += f"\n\n### File: {filename}\n"
-            full_diff += f"**Changed lines:**\n{file['patch']}\n"  # just the diff
-            full_diff += f"**Full file:**\n```\n{decoded}\n```"
-            
-            # full_diff += f"\n\n### File: {filename}\n```\n{decoded}\n```"
-        
+            MAX_FILE_CHARS = 3000
+
+            full_diff += f"### File: {filename}\n"
+            full_diff += f"**Changes:**\n{file['patch']}\n\n"
+
+            if len(decoded) <= MAX_FILE_CHARS:
+                full_diff += f"**Full file context:**\n```python\n{decoded}\n```\n\n"
+            else:
+                full_diff += f"**Note:** File too large to include in full, showing diff only.\n\n"
+                    
         return full_diff
         
 
