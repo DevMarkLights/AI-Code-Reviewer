@@ -5,7 +5,7 @@ from agents.agentState import AgentState
 import os
 from dotenv import load_dotenv
 from connectionManager import manager
-from .loadModel import llm_large as llm
+from .loadModel import GROQ_MODEL_llama3_3 as llm
 import re
 from connectionManager import manager
 
