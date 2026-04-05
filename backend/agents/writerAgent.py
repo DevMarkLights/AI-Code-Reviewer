@@ -5,7 +5,7 @@ from agents.agentState import AgentState
 import os
 from dotenv import load_dotenv
 from connectionManager import manager
-from .loadModel import llm_small as llm
+from .loadModel import llm_large as llm
 import re
 from connectionManager import manager
 
