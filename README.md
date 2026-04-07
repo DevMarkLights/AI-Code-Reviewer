@@ -2,7 +2,7 @@
 
 An agentic code review system that analyzes GitHub Pull Requests using a parallel multi-agent pipeline. Submit a PR URL and three specialized AI agents run concurrently to detect bugs, security vulnerabilities, and performance issues — then automatically post a structured review comment directly to the PR.
 
-**Live Demo:** [marks-pi.com](https://marks-pi.com)
+**Live Demo:** [Ai Code Reviewer](https://marks-pi.com/ai-code-reviewer/)
 
 ---
 
