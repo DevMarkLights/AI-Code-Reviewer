@@ -21,6 +21,6 @@ if os.getenv("USE_LOCAL") == 'true':
 else:
     print('cloud model')
     GROQ_MODEL_llama3_1 = ChatGroq(model=os.getenv("GROQ_MODEL_llama3_1"), temperature=0, max_tokens=4096)
-    GROQ_MODEL_groq_compound_mini = ChatGroq(model=os.getenv("GROQ_MODEL_groq_compound-mini"), temperature=0, max_tokens=4096)
+    GROQ_MODEL_groq_compound_mini = ChatGroq(model=os.getenv("GROQ_MODEL_groq_compound_mini"), temperature=0, max_tokens=4096)
     GROQ_MODEL_groq_compound = ChatGroq(model=os.getenv("GROQ_MODEL_groq_compound"), temperature=0, max_tokens=4096)
     GROQ_MODEL_llama3_3 = ChatGroq(model=os.getenv("GROQ_MODEL_llama3_3"), temperature=0, max_tokens=4096)
