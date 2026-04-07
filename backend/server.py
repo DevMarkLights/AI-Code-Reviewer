@@ -92,7 +92,7 @@ async def getReview(body: dict = Body(...)):
         
     except Exception as e:
         logging.error(msg=e)
-        return {'result': 'Agents context Exceeded. Please try again in few minutes.'}
+        return {'result': 'Agents context/limits Exceeded. Please try again in few minutes.'}
         
     return {'result': result['finalReview']}
 
