@@ -131,6 +131,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str=None):
 @app.post("/ai-code-reviewer/deploy")
 async def deploy(request: Request):
     body = await request.json()
+    print(f"Received secret: '{body.get('secret')}'")
+    print(f"Expected secret: '{DEPLOY_SECRET}'")
     if body.get("secret") != DEPLOY_SECRET:
         raise HTTPException(status_code=401)
     
