@@ -137,7 +137,7 @@ async def deploy(request: Request):
         raise HTTPException(status_code=401)
     
     
-    subprocess.Popen(["bash", f"/mnt/nvme/AI-Code-Reviewer/deploy.sh"])
+    subprocess.Popen(["bash", f"/mnt/nvme/AI-Code-Reviewer/deploy.bash"])
     return {"status": "deploying", "service": 'AI-Code-Reviewer'}
         
 
