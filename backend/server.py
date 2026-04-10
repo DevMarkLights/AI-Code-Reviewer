@@ -24,7 +24,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-DEPLOY_SECRET = os.getenv("USE_LOCAL")
+DEPLOY_SECRET = os.getenv("DEPLOY_SECRET")
 
 import logging
 
