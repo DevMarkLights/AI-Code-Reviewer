@@ -1,4 +1,6 @@
-from fastapi import FastAPI, File, UploadFile, Body, Form, WebSocket, WebSocketDisconnect
+from asyncio import subprocess
+
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile, Body, Form, WebSocket, WebSocketDisconnect
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -18,6 +20,11 @@ from pathlib import Path
 from agents.loadModel import llm_small, llm_large #load model one time
 from fetchDiff import fetch_diff
 from fetchDiff import postComment
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+DEPLOY_SECRET = os.getenv("USE_LOCAL")
 
 import logging
 
@@ -119,6 +126,17 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str=None):
     
     finally:
         manager.disconnect(websocket=websocket,clientID=client_id)
+        
+
+@app.post("/ai-code-reviewer/deploy")
+async def deploy(request: Request):
+    body = await request.json()
+    if body.get("secret") != DEPLOY_SECRET:
+        raise HTTPException(status_code=401)
+    
+    
+    subprocess.Popen(["bash", f"/mnt/nvme/AI-Code-Reviewer/deploy.sh"])
+    return {"status": "deploying", "service": 'AI-Code-Reviewer'}
         
 
 app.mount("/ai-code-reviewer", StaticFiles(directory="dist", html=True), name="static")
