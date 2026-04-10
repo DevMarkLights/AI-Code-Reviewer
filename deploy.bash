@@ -1,3 +1,4 @@
+#!/bin/bash
 cd /mnt/nvme/AI-Code-Reviewer
 
 git pull
@@ -6,7 +7,8 @@ cd frontend
 npm run build
 
 cd ../backend
-pip install -r requirements.txt --quiet
+.venv/bin/pip install -r requirements.txt --quiet
+
 rm -rf dist
 
 cd ../frontend
