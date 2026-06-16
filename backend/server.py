@@ -91,6 +91,7 @@ async def getReview(body: dict = Body(...)):
             return {'result', 'no url provided'}
     except Exception as e:
         logging.error(msg=e)
+        await manager.broadcast(message={'message':f'Invalid Url: {url}'}, client_id=client_id)
         return {'result', 'invalid url'}
     
     try:
