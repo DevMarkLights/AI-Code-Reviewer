@@ -84,8 +84,9 @@ async def getReview(body: dict = Body(...)):
     try:
         if 'url' in body and 'client_id' in body:
             url = body['url']
+            client_id = body['client_id']
             diff = await fetch_diff(url)
-            client_id = body['client_id'] 
+             
             await manager.broadcast(message={'message':'Found pull request'}, client_id=client_id)
         else:
             return {'result', 'no url provided'}
