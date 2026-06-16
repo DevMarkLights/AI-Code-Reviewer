@@ -81,13 +81,17 @@ async def getReview(body: dict = Body(...)):
     url = ""
     client_id = ''
     diff = ''
-    if 'url' in body and 'client_id' in body:
-        url = body['url']
-        diff = await fetch_diff(url)
-        client_id = body['client_id'] 
-        await manager.broadcast(message={'message':'Found pull request'}, client_id=client_id)
-    else:
-        return {'result', 'no url provided'}
+    try:
+        if 'url' in body and 'client_id' in body:
+            url = body['url']
+            diff = await fetch_diff(url)
+            client_id = body['client_id'] 
+            await manager.broadcast(message={'message':'Found pull request'}, client_id=client_id)
+        else:
+            return {'result', 'no url provided'}
+    except Exception as e:
+        logging.error(msg=e)
+        return {'result', 'invalid url'}
     
     try:
         
